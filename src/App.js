@@ -1,28 +1,55 @@
 import './App.css';
 import Navbar from './components/Navbar';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from 'components/Home';
 import { useContext } from 'react';
 import { AuthContext } from 'contexts/AuthContext';
 import theme from 'theme';
 import RestaurantDetails from 'components/restaurants/details';
+import Login from 'components/common/Login';
+import NewRestaurant from 'components/restaurants/newRestaurant';
+import EditRestaurant from 'components/restaurants/editRestaurant';
 const { ThemeProvider } = require('@material-ui/styles');
 
 const App = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   return (
     <div className='App'>
       <ThemeProvider theme={theme}>
-        <Navbar />
-        <Routes>
-          <Route exact path='/' element={<Home />} />
-          <Route
-            exact
-            path='/restaurants/:id'
-            element={<RestaurantDetails />}
-          />
-          {/* <Route exact path='/' element={Home} /> */}
-        </Routes>
+        {loading ? (
+          <div className='loader'></div>
+        ) : (
+          <>
+            {' '}
+            <Navbar />
+            <Routes>
+              <Route exact path='/' element={<Home />} />
+              {!user && <Route exact path='/login' element={<Login />} />}
+              {user && (
+                <>
+                  <Route
+                    exact
+                    path='/restaurants/new'
+                    element={<NewRestaurant />}
+                  />
+                  <Route
+                    exact
+                    path='/restaurants/:id/edit'
+                    element={<EditRestaurant />}
+                  />
+                </>
+              )}
+              <Route
+                exact
+                path='/restaurants/:id'
+                element={<RestaurantDetails />}
+              />
+              {/* <Navigate to='/' /> */}
+              <Route path='*' element={<Navigate to='/' />} />
+              {/* <Route exact path='/' element={Home} /> */}
+            </Routes>
+          </>
+        )}
       </ThemeProvider>
     </div>
   );

@@ -36,6 +36,43 @@ export const RestaurantsProvider = ({ children }) => {
     fetchRestaurants();
   }, []);
 
+  // * CRUD Operations
+  const createRestaurant = async (state, callback) => {
+    try {
+      const resData = await makeReq(`/restaurants`, { body: state }, 'POST');
+      toast.success('Restaurant Created Successfully!');
+      pushRestaurant(resData.restaurant);
+      callback?.();
+    } catch (err) {
+      handleCatch(err);
+    }
+  };
+
+  const editRestaurant = async (id, state, callback) => {
+    try {
+      const resData = await makeReq(
+        `/restaurants/${id}`,
+        { body: state },
+        'PATCH'
+      );
+      toast.success('Restaurant Updated Successfully!');
+      updateRestaurant(id, resData.restaurant);
+      callback?.();
+    } catch (err) {
+      handleCatch(err);
+    }
+  };
+
+  const deleteRestaurant = async (id) => {
+    try {
+      await makeReq(`/restaurants/${id}`, {}, 'DELETE');
+      toast.success('Restaurant Deleted Successfully!');
+      removeRestaurant(id);
+    } catch (err) {
+      handleCatch(err);
+    }
+  };
+
   return (
     <RestaurantsContext.Provider
       displayName='Restaurants Context'
@@ -43,6 +80,9 @@ export const RestaurantsProvider = ({ children }) => {
         loading,
         restaurants,
         getRestaurantById,
+        createRestaurant,
+        deleteRestaurant,
+        editRestaurant,
       }}
     >
       {children}

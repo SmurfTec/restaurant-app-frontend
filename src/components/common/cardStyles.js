@@ -12,13 +12,16 @@ const styles = makeStyles((theme) => ({
   },
   cardContent: {
     flexGrow: 1,
-    padding: '10px 15px',
+    paddingBlock: 10,
+    minHeight: 150,
+    paddingBottom: 0,
   },
   content: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 10,
   },
   amountContent: {
     display: 'flex',

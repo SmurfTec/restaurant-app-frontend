@@ -1,13 +1,15 @@
+import { useToggle } from 'hooks';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { makeReq, handleCatch } from 'utils/makeReq';
 
-export const LOCALSTORAGE_TOKEN_KEY = 'admin-token';
+export const LOCALSTORAGE_TOKEN_KEY = 'restaurant-token';
 
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
   // let history = useHistory();
+  const [loading, toggleLoading] = useToggle(true);
   let tokenLocal;
 
   try {
@@ -35,6 +37,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('user');
 
       // if (history.location !== '/') history.push('/');
+    } finally {
+      toggleLoading();
     }
   };
 
@@ -90,6 +94,7 @@ export const AuthProvider = ({ children }) => {
         setUser,
         signInUser,
         updateMe,
+        loading,
       }}
     >
       {children}

@@ -9,19 +9,22 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import SearchBar from 'material-ui-search-bar';
 
 import useStyles from './styles';
-import { Box, Button, useTheme } from '@material-ui/core';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Box, Button } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
 import logo from 'assets/logo.jpg';
+import { AuthContext } from 'contexts/AuthContext';
 
 const Navbar = () => {
   const classes = useStyles();
-  const theme = useTheme();
+
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [searchTxt, setSearchTxt] = useState('');
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const { logoutUser, user } = useContext(AuthContext);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -71,7 +74,7 @@ const Navbar = () => {
         <Button
           variant='contained'
           className={classes.RegisterBtn}
-          onClick={() => navigate('/account')}
+          onClick={() => navigate('/login')}
         >
           Login / Register
         </Button>
@@ -146,13 +149,23 @@ const Navbar = () => {
                   minWidth: 200,
                 }}
               >
-                <Button
-                  variant='contained'
-                  className={classes.RegisterBtn}
-                  onClick={() => navigate('/account')}
-                >
-                  Admin Login
-                </Button>
+                {user ? (
+                  <Button
+                    variant='contained'
+                    className={classes.RegisterBtn}
+                    onClick={logoutUser}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    variant='contained'
+                    className={classes.RegisterBtn}
+                    onClick={() => navigate('/login')}
+                  >
+                    Admin Login
+                  </Button>
+                )}
               </Box>
             </Box>
           </div>

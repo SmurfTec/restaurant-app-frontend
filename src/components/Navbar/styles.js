@@ -40,13 +40,10 @@ const useStyles = makeStyles((theme) => ({
   },
   RegisterBtn: {
     '&.MuiButton-contained': {
-      backgroundColor: 'rgb(6, 198, 255)',
       borderRadius: 20,
       color: '#fff',
       transition: '0.6s',
-      '&:hover': {
-        backgroundColor: '#03a0d7',
-      },
+      backgroundColor: theme.palette.primary.light,
     },
   },
 
