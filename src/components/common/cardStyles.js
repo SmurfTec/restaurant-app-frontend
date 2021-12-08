@@ -13,7 +13,7 @@ const styles = makeStyles((theme) => ({
   cardContent: {
     flexGrow: 1,
     paddingBlock: 10,
-    minHeight: 150,
+    // minHeight: 150,
     paddingBottom: 0,
   },
   content: {
@@ -36,10 +36,8 @@ const styles = makeStyles((theme) => ({
     opacity: 0.5,
     textDecoration: 'line-through solid red',
   },
-  Price: {
-    backgroundColor: '#fff',
-    padding: theme.spacing(1.2),
-    borderRadius: 15,
+  price: {
+    color: theme.palette.success.main,
   },
   expireDate: {
     position: 'absolute',
@@ -73,6 +71,14 @@ const styles = makeStyles((theme) => ({
     display: '-webkit-box',
     WebkitLineClamp: 3,
     WebkitBoxOrient: 'vertical',
+  },
+  MenuItem: {
+    display: 'flex',
+    // gap: 20,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: '1rem',
+    justifyContent: 'space-between',
   },
 }));
 

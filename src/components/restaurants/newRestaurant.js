@@ -42,8 +42,9 @@ const NewRestaurant = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!state.logo) toast.error('Please select Restaurant Logo');
-    if (!state.images.length) toast.error('Please select Restaurant Images');
+    if (!state.logo) return toast.error('Please select Restaurant Logo');
+    if (!state.images.length)
+      return toast.error('Please select Restaurant Images');
     toggleIsSubmitting();
 
     createRestaurant({ ...state }, () => {
@@ -63,7 +64,7 @@ const NewRestaurant = () => {
         let reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend = async (e) => {
-          console.log(`result onLoadEnd`, e.target.result);
+          //console.log(`result onLoadEnd`, e.target.result);
           const file = e.target.result;
 
           // TODO  Delete Image from cloudinary if it exists on this user

@@ -10,12 +10,15 @@ import SearchBar from 'material-ui-search-bar';
 
 import useStyles from './styles';
 import { Box, Button } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import logo from 'assets/logo.jpg';
 import { AuthContext } from 'contexts/AuthContext';
+import theme from 'theme';
 
 const Navbar = () => {
   const classes = useStyles();
+
+  const location = useLocation();
 
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -105,6 +108,31 @@ const Navbar = () => {
             />
             Restaurant App
           </Typography>
+          {user && (
+            <Typography
+              variant='h5'
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginLeft: 10,
+              }}
+            >
+              <NavLink
+                to='/menus'
+                // activeStyle={{
+                //   color: 'red',
+                // }}
+                style={({ isActive }) => ({
+                  color: isActive ? theme.palette.primary.main : '#000',
+                  textDecoration: 'none',
+                })}
+              >
+                Menus
+              </NavLink>
+            </Typography>
+          )}
 
           <div
             style={{
@@ -115,13 +143,15 @@ const Navbar = () => {
             }}
             className={classes.SearchBar}
           >
-            <SearchBar
-              value={searchTxt}
-              onChange={(newValue) => setSearchTxt(newValue)}
-              onRequestSearch={handleSearch}
-              placeholder='Search Restaurants'
-              style={{ boxShadow: 'none', border: '1px solid #ccc' }}
-            />
+            {location.pathname === '/' && (
+              <SearchBar
+                value={searchTxt}
+                onChange={(newValue) => setSearchTxt(newValue)}
+                onRequestSearch={handleSearch}
+                placeholder='Search Restaurants'
+                style={{ boxShadow: 'none', border: '1px solid #ccc' }}
+              />
+            )}
           </div>
           <div className={classes.sectionDesktop}>
             <Box

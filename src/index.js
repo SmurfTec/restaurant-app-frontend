@@ -11,24 +11,27 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
+import { MenusProvider } from 'contexts/MenusContext';
 // -------------------------------- //
 
 ReactDOM.render(
   <BrowserRouter>
     <AuthProvider>
       <RestaurantsProvider>
-        <App />
-        <ToastContainer
-          position='top-right'
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop={true}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+        <MenusProvider>
+          <App />
+          <ToastContainer
+            position='top-right'
+            autoClose={3000}
+            hideProgressBar
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </MenusProvider>
       </RestaurantsProvider>
     </AuthProvider>
   </BrowserRouter>,

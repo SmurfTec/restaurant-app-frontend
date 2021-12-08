@@ -83,7 +83,7 @@ const EditRestaurant = () => {
         let reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend = async (e) => {
-          console.log(`result onLoadEnd`, e.target.result);
+          //console.log(`result onLoadEnd`, e.target.result);
           const file = e.target.result;
 
           // TODO  Delete Image from cloudinary if it exists on this user

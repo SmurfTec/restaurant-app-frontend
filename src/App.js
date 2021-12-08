@@ -9,6 +9,10 @@ import RestaurantDetails from 'components/restaurants/details';
 import Login from 'components/common/Login';
 import NewRestaurant from 'components/restaurants/newRestaurant';
 import EditRestaurant from 'components/restaurants/editRestaurant';
+import Menus from 'components/menus';
+import NewMenu from 'components/menus/newMenu';
+import EditMenu from 'components/menus/editMenu';
+import MenuDetails from 'components/menus/details';
 const { ThemeProvider } = require('@material-ui/styles');
 
 const App = () => {
@@ -37,6 +41,10 @@ const App = () => {
                     path='/restaurants/:id/edit'
                     element={<EditRestaurant />}
                   />
+                  <Route exact path='/menus' element={<Menus />} />
+                  <Route exact path='/menus/new' element={<NewMenu />} />
+                  <Route exact path='/menus/:id' element={<MenuDetails />} />
+                  <Route exact path='/menus/:id/edit' element={<EditMenu />} />
                 </>
               )}
               <Route
