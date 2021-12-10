@@ -59,7 +59,7 @@ const EditRestaurant = () => {
     }
 
     setState({ ...el });
-  }, [loading, restaurants, getRestaurantById]);
+  }, [loading, restaurants, getRestaurantById, id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

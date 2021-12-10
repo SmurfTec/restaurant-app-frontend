@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { Add, HighlightOff } from '@material-ui/icons';
+import { Add, HighlightOff, Save } from '@material-ui/icons';
 import axios from 'axios';
 import { useManyInputs, useToggle } from 'hooks';
 import { toast } from 'react-toastify';
@@ -18,24 +18,17 @@ import useStyles from './newMenuStyles';
 import { MenusContext } from 'contexts/MenusContext';
 import UseToggle from 'hooks/useToggle';
 import v4 from 'uuid/dist/v4';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const NewMenu = () => {
+const EditMenu = () => {
   const classes = useStyles();
-  const { createMenu } = useContext(MenusContext);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const { menus, getMenuById, editMenu, loading } = useContext(MenusContext);
   const initialState = {
     name: '',
-    items: [
-      {
-        name: '',
-        price: '',
-        description: '',
-        image: '',
-        type: 'appetizers',
-        _id: v4(),
-      },
-    ],
+    items: [],
   };
 
   const newItem = {
@@ -57,6 +50,21 @@ const NewMenu = () => {
 
   const [isSubmitting, toggleIsSubmitting] = UseToggle(false);
 
+  useEffect(() => {
+    if (loading) return;
+
+    let el = getMenuById(id);
+
+    if (!el) {
+      toast.error('No Menu found... Redirecting');
+      setTimeout(() => {
+        navigate('/menus');
+      }, 1500);
+    }
+
+    setState({ ...el });
+  }, [getMenuById, menus, loading, id]);
+
   const addNewItem = () => {
     setState((st) => ({
       ...st,
@@ -74,12 +82,10 @@ const NewMenu = () => {
   };
 
   const handleItemTextChange = (e, _id) => {
-    console.log(`_id`, _id);
     console.log(`e.currentTarget.dataset`, e.currentTarget.dataset);
     setState((st) => ({
       ...st,
       items: st.items.map((el) => {
-        console.log(`el._id === _id`, el._id === _id);
         return el._id === _id ? { ...el, [e.target.name]: e.target.value } : el;
       }),
     }));
@@ -88,18 +94,17 @@ const NewMenu = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!state.items.length) return toast.error('Please select Menu Items');
+    toggleIsSubmitting();
 
     // * Check if any menu item exists without an Image
     const invalidMenuItems = state.items.filter((item) => !item.image);
     if (invalidMenuItems.length > 0)
       return toast.error('Menu Items must have an Image');
 
-    toggleIsSubmitting();
-
-    createMenu({ ...state }, () => {
+    editMenu(id, { ...state }, () => {
       toggleIsSubmitting();
       resetState();
-      navigate(`/menus`);
+      navigate(`/menus/${id}`);
     });
   };
 
@@ -108,12 +113,10 @@ const NewMenu = () => {
     const selectedFile = e.target.files[0];
     const fileType = ['image/'];
     try {
-      console.log(`selectedFile.type`, selectedFile.type);
       if (selectedFile && selectedFile.type.includes(fileType)) {
         let reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend = async (e) => {
-          //console.log(`result onLoadEnd`, e.target.result);
           const file = e.target.result;
 
           // TODO  Delete Image from cloudinary if it exists on this user
@@ -131,7 +134,6 @@ const NewMenu = () => {
             formData
           );
           const uploadedImage = res.data.url;
-          console.log(`res`, res);
 
           cb(uploadedImage);
           toggleFunc?.();
@@ -156,7 +158,7 @@ const NewMenu = () => {
       }}
     >
       <Typography align='center' variant='h5'>
-        New Menu
+        Update Menu
       </Typography>
       <Box className={classes.FormBox}>
         <form onSubmit={handleSubmit}>
@@ -191,7 +193,7 @@ const NewMenu = () => {
             }}
           >
             {state.items.map((item) => (
-              <Box key={item._id} className={classes.MenuItem}>
+              <Box key={item.id || item._id} className={classes.MenuItem}>
                 <Box
                   key={item}
                   style={{
@@ -203,7 +205,7 @@ const NewMenu = () => {
                   {/* <img src={item} style={{ width: 100, height: 70 }} /> */}
                   <HighlightOff
                     data-img={item}
-                    data-id={item._id}
+                    data-id={item.id || item._id}
                     onClick={deleteItem}
                     color='error'
                     style={{
@@ -308,12 +310,12 @@ const NewMenu = () => {
           <Button
             variant='contained'
             color='secondary'
-            endIcon={<Add />}
             style={{ marginTop: '1rem' }}
             type='submit'
+            endIcon={<Save />}
             disabled={isSubmitting}
           >
-            Create
+            Upadate
           </Button>
         </form>
       </Box>
@@ -321,4 +323,4 @@ const NewMenu = () => {
   );
 };
 
-export default NewMenu;
+export default EditMenu;
