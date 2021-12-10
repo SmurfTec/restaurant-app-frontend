@@ -6,11 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import SearchBar from 'material-ui-search-bar';
 
 import useStyles from './styles';
 import { Box, Button } from '@material-ui/core';
-import { useNavigate, useLocation, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import logo from 'assets/logo.jpg';
 import { AuthContext } from 'contexts/AuthContext';
 import theme from 'theme';
@@ -18,12 +17,9 @@ import theme from 'theme';
 const Navbar = () => {
   const classes = useStyles();
 
-  const location = useLocation();
-
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [searchTxt, setSearchTxt] = useState('');
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -142,17 +138,7 @@ const Navbar = () => {
               marginInline: 'auto',
             }}
             className={classes.SearchBar}
-          >
-            {location.pathname === '/' && (
-              <SearchBar
-                value={searchTxt}
-                onChange={(newValue) => setSearchTxt(newValue)}
-                onRequestSearch={handleSearch}
-                placeholder='Search Restaurants'
-                style={{ boxShadow: 'none', border: '1px solid #ccc' }}
-              />
-            )}
-          </div>
+          ></div>
           <div className={classes.sectionDesktop}>
             <Box
               display='flex'

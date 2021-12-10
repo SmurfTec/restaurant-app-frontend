@@ -21,7 +21,6 @@ export const styles = makeStyles((theme) => ({
   },
   heroContent: {
     backgroundColor: theme.palette.background.paper,
-    paddingBottom: theme.spacing(6),
   },
   title: {
     position: 'absolute',
