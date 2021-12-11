@@ -12,10 +12,16 @@ import { Link } from 'react-router-dom';
 import menuImg from 'assets/menucover.jpg';
 import Banner from 'components/common/Banner';
 import SearchBarComponent from 'components/common/SearchBar';
+import { RestaurantsContext } from 'contexts/RestaurantsContext';
+import UseToggle from 'hooks/useToggle';
+import { AddToMeal } from 'dialogs';
 
 const MenusList = () => {
+  const { restaurants, addMenuToRestaurant } = useContext(RestaurantsContext);
   const { loading, menus, deleteMenu } = useContext(MenusContext);
   const { user } = useContext(AuthContext);
+  const [addTo, setAddTo] = useState([]);
+  const [isAddOpen, toggleAddOpen] = UseToggle(false);
 
   const [state, setState] = useState([]);
 
@@ -28,6 +34,18 @@ const MenusList = () => {
   const filterMenus = (val) => {
     console.log(`val`, val);
     setState(menus?.filter((el) => el.name.toLowerCase().indexOf(val) !== -1));
+  };
+
+  const handleAdd = (menuId, restaurantId) => {
+    console.log(`menuId`, menuId);
+    console.log(`restaurantId`, restaurantId);
+    setAddTo([menuId, restaurantId]);
+    toggleAddOpen();
+  };
+
+  const addMenuToMeal = (meal) => {
+    console.log(`meal`, meal);
+    addMenuToRestaurant(addTo[1], addTo[0], { name: meal });
   };
 
   return (
@@ -72,12 +90,23 @@ const MenusList = () => {
           <Grid container spacing={2}>
             {state?.map((el) => (
               <Grid item xs={12} sm={4} md={3} key={el._id}>
-                <MenuCard menu={el} user={user} deleteMenu={deleteMenu} />
+                <MenuCard
+                  restaurants={restaurants}
+                  menu={el}
+                  user={user}
+                  deleteMenu={deleteMenu}
+                  handleAdd={handleAdd}
+                />
               </Grid>
             ))}
           </Grid>
         )}
       </Container>
+      <AddToMeal
+        open={isAddOpen}
+        toggleDialog={toggleAddOpen}
+        handleAdd={addMenuToMeal}
+      />
     </Box>
   );
 };

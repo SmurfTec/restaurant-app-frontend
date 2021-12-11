@@ -104,31 +104,6 @@ const Navbar = () => {
             />
             Restaurant App
           </Typography>
-          {user && (
-            <Typography
-              variant='h5'
-              style={{
-                cursor: 'pointer',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginLeft: 10,
-              }}
-            >
-              <NavLink
-                to='/menus'
-                // activeStyle={{
-                //   color: 'red',
-                // }}
-                style={({ isActive }) => ({
-                  color: isActive ? theme.palette.primary.main : '#000',
-                  textDecoration: 'none',
-                })}
-              >
-                Menus
-              </NavLink>
-            </Typography>
-          )}
 
           <div
             style={{
@@ -165,6 +140,31 @@ const Navbar = () => {
                   minWidth: 200,
                 }}
               >
+                {user && (
+                  <Typography
+                    variant='h5'
+                    style={{
+                      cursor: 'pointer',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginLeft: 10,
+                    }}
+                  >
+                    <NavLink
+                      to='/menus'
+                      // activeStyle={{
+                      //   color: 'red',
+                      // }}
+                      style={({ isActive }) => ({
+                        color: isActive ? theme.palette.primary.main : '#000',
+                        textDecoration: 'none',
+                      })}
+                    >
+                      Menus
+                    </NavLink>
+                  </Typography>
+                )}
                 {user ? (
                   <Button
                     variant='contained'

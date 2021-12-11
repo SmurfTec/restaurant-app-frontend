@@ -63,6 +63,20 @@ export const RestaurantsProvider = ({ children }) => {
     }
   };
 
+  const addMenuToRestaurant = async (restaurantId, menuId, state) => {
+    try {
+      const resData = await makeReq(
+        `/restaurants/${restaurantId}/menus/${menuId}`,
+        { body: state },
+        'PATCH'
+      );
+      toast.success('Menu Added to Restaurant Successfully!');
+      updateRestaurant(restaurantId, resData.restaurant);
+    } catch (err) {
+      handleCatch(err);
+    }
+  };
+
   const deleteRestaurant = async (id) => {
     try {
       await makeReq(`/restaurants/${id}`, {}, 'DELETE');
@@ -83,6 +97,7 @@ export const RestaurantsProvider = ({ children }) => {
         createRestaurant,
         deleteRestaurant,
         editRestaurant,
+        addMenuToRestaurant,
       }}
     >
       {children}

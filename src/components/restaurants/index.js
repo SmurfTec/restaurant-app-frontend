@@ -20,7 +20,7 @@ const RestaurantsList = () => {
     if (!restaurants || loading) return;
 
     setState(restaurants);
-  }, [restaurants]);
+  }, [restaurants, loading]);
 
   const filterRestaurants = (val) => {
     console.log(`val`, val);

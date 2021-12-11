@@ -7,16 +7,18 @@ import Typography from '@material-ui/core/Typography';
 
 import { useNavigate } from 'react-router';
 import useStyles from './cardStyles';
-import { Box, CardActions, IconButton } from '@material-ui/core';
-import { DeleteForever, Edit } from '@material-ui/icons';
+import { Box, Button, CardActions, IconButton } from '@material-ui/core';
+import { Add, DeleteForever, Edit } from '@material-ui/icons';
 import DeleteMenuDialog from 'dialogs/ConfirmDialogBox';
 import { useToggle } from 'hooks';
+import { AddToRestaurant } from 'dialogs';
 
-const RestautantCard = ({ menu, user, deleteMenu }) => {
+const MenuCard = ({ handleAdd, restaurants, menu, user, deleteMenu }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { _id, name, items } = menu;
   const [isDeleteOpen, toggleDeleteOpen] = useToggle(false);
+  const [isAddOpen, toggleAddOpen] = useToggle(false);
 
   const handleClick = () => {
     navigate(`/menus/${_id}`);
@@ -50,13 +52,12 @@ const RestautantCard = ({ menu, user, deleteMenu }) => {
             </section>
 
             {items.slice(0, 3).map((item) => (
-              <Box className={classes.MenuItem}>
+              <Box className={classes.MenuItem} key={item._id}>
                 <Box>
                   <Typography
                     variant='body1'
                     component='p'
                     className={classes.description}
-                    key={item._id}
                   >
                     {item.name}
                   </Typography>
@@ -64,7 +65,6 @@ const RestautantCard = ({ menu, user, deleteMenu }) => {
                     variant='body1'
                     component='p'
                     className={classes.price}
-                    key={item._id}
                   >
                     {item.price} $
                   </Typography>
@@ -87,6 +87,16 @@ const RestautantCard = ({ menu, user, deleteMenu }) => {
               <IconButton onClick={handleEdit}>
                 <Edit color='primary' />
               </IconButton>
+              <Button
+                variant='contained'
+                endIcon={<Add />}
+                style={{ marginLeft: 'auto' }}
+                onClick={toggleAddOpen}
+                color='secondary'
+                size='small'
+              >
+                Add to
+              </Button>
             </>
           )}
         </CardActions>
@@ -97,7 +107,13 @@ const RestautantCard = ({ menu, user, deleteMenu }) => {
         success={handleDelete}
         dialogTitle='Delete this Menu ?'
       />
+      <AddToRestaurant
+        restaurants={restaurants}
+        open={isAddOpen}
+        toggleDialog={toggleAddOpen}
+        handleAdd={(restaurantId) => handleAdd(_id, restaurantId)}
+      />
     </>
   );
 };
-export default RestautantCard;
+export default MenuCard;
